@@ -1,11 +1,17 @@
-import Vue from 'vue';
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
-import Vuelidate from 'vuelidate'
-import App from './App.vue';
-import router from './router';
-import store from './store';
-
-// scss style
-import './assets/scss/index.scss';
-
-Vue.use(Vuelidate)
+module.exports = {
+  root: true,
+  env: {
+    node: true,
+  },
+  extends: [
+    'plugin:vue/essential',
+    '@vue/airbnb',
+  ],
+  parserOptions: {
+    parser: 'babel-eslint',
+  },
+  rules: {
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+  },
+};
