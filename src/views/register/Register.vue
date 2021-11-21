@@ -67,6 +67,8 @@
 <script>
 import { required, minLength, sameAs } from 'vuelidate/lib/validators';
 import customValidator from '@/helper/validator';
+import storageService from '@/service/storageService';
+import userService from '@/service/userService';
 
 export default {
   name: 'UserRegister',
@@ -112,12 +114,16 @@ export default {
         return;
       }
       // request api
-      const api = 'http://localhost:8008/api/auth/register';
-      this.axios.post(api, { ...this.user }).then((res) => {
+      userService.register(this.user).then((res) => {
         // save token
-        localStorage.setItem('token', res.data.data.token);
-        // jump to home page
-        this.$router.replace({ name: 'Home' });
+        storageService.set(storageService.USER_TOKEN, res.data.data.token);
+        // get user info
+        userService.info().then((response) => {
+          // save user info
+          storageService.set(storageService.USER_INFO, JSON.stringify(response.data.data.user));
+          // jump to home page
+          this.$router.replace({ name: 'Home' });
+        });
       }).catch((err) => {
         this.$bvToast.toast(err.response.data.msg, {
           title: '数据验证错误',
@@ -125,8 +131,6 @@ export default {
           solid: true,
         });
       });
-
-      console.log('register');
     },
   },
 };

@@ -28,6 +28,12 @@ const routes = [{
 },
 ];
 
+// 解决路由跳转时报错 Avoided redundant navigation to current location: "/xxxxx".
+const originPush = VueRouter.prototype.push;
+VueRouter.prototype.push = (location) => {
+  return originPush.call(this, location).catch((err) => err);
+};
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
