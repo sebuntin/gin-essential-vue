@@ -48,7 +48,6 @@
 <script>
 import { required, minLength } from 'vuelidate/lib/validators';
 import customValidator from '@/helper/validator';
-import userService from '@/service/userService';
 
 export default {
   name: 'UserLogin',
@@ -87,18 +86,10 @@ export default {
         return;
       }
       // request api
-      userService.login({
+      this.$store.dispatch('user/login', {
         telephone: this.user.telephone,
         password: this.user.password,
-      }).then((res) => {
-        // save token
-        this.$store.commit('user/SET_TOKEN', res.data.data.token);
-        // get user info
-        return userService.info();
-      }).then((res) => {
-        // save user info
-        this.$store.commit('user/SET_USERINFO', res.data.data.user);
-        // jump to home page
+      }).then(() => {
         this.$router.replace({ name: 'Home' });
       }).catch((err) => {
         this.$bvToast.toast(err.response.data.msg, {

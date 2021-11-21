@@ -66,8 +66,8 @@
 
 <script>
 import { required, minLength, sameAs } from 'vuelidate/lib/validators';
+// import { mapActions } from 'vuex';
 import customValidator from '@/helper/validator';
-import userService from '@/service/userService';
 
 export default {
   name: 'UserRegister',
@@ -100,6 +100,7 @@ export default {
     },
   },
   methods: {
+    // TODO: 使用mapActions重命名模块调用
     validateState(name) {
       // 这里是es6解构赋值
       const { $dirty, $error } = this.$v.user[name];
@@ -112,15 +113,7 @@ export default {
       if (this.$v.user.$anyError) {
         return;
       }
-      // request api
-      userService.register(this.user).then((res) => {
-        // save token
-        this.$store.commit('user/SET_TOKEN', res.data.data.token);
-        // get user info
-        return userService.info();
-      }).then((res) => {
-        // save user info
-        this.$store.commit('user/SET_USERINFO', res.data.data.user);
+      this.$store.dispatch('user/register', this.user).then(() => {
         // jump to home page
         this.$router.replace({ name: 'Home' });
       }).catch((err) => {
