@@ -49,7 +49,6 @@
 import { required, minLength } from 'vuelidate/lib/validators';
 import customValidator from '@/helper/validator';
 import userService from '@/service/userService';
-import storageService from '@/service/storageService';
 
 export default {
   name: 'UserLogin',
@@ -93,12 +92,12 @@ export default {
         password: this.user.password,
       }).then((res) => {
         // save token
-        storageService.set(storageService.USER_TOKEN, res.data.data.token);
+        this.$store.commit('user/SET_TOKEN', res.data.data.token);
         // get user info
-        userService.info().then((response) => {
-          // save user info
-          storageService.set(storageService.USER_INFO, JSON.stringify(response.data.data.user));
-        });
+        return userService.info();
+      }).then((res) => {
+        // save user info
+        this.$store.commit('user/SET_USERINFO', res.data.data.user);
         // jump to home page
         this.$router.replace({ name: 'Home' });
       }).catch((err) => {
@@ -108,7 +107,6 @@ export default {
           solid: true,
         });
       });
-      console.log('login');
     },
   },
 };

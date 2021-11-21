@@ -10,8 +10,6 @@ import store from './store';
 // scss style
 import './assets/scss/index.scss';
 
-Vue.use(Vuelidate);
-
 // ESLint 作用:
 // 1. 检查语法错误
 // 2. 检查代码规范
@@ -22,7 +20,11 @@ Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue ic on components plugin
 Vue.use(IconsPlugin);
 
+// vuelidate
+Vue.use(Vuelidate);
+// axios
 Vue.use(VueAxios, axios);
+
 new Vue({
   router,
   store,

@@ -44,17 +44,18 @@
   </b-navbar>
 </template>
 <script>
-import storageService from '@/service/storageService';
+import { mapState } from 'vuex';
 
 export default {
-  computed: {
-    // 由于不是响应式的,故无法同步更新
+  computed:
+    // 由于缓存中[localStorage]的数据不是响应式的,故无法立即同步更新
     // 当换账号登录后,必须刷新页面后才能更新
-    userInfo() {
-      console.log(JSON.parse(storageService.get(storageService.USER_INFO)));
-      return JSON.parse(storageService.get(storageService.USER_INFO));
-    },
-  },
+    mapState({
+      // 从vuex中获取
+      // console.log(JSON.parse(storageService.get(storageService.USER_INFO)));
+      // return JSON.parse(storageService.get(storageService.USER_INFO));
+      userInfo: (state) => state.user.userInfo,
+    }),
   name: 'NavBar',
 };
 </script>
