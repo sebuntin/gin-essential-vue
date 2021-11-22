@@ -66,7 +66,7 @@
 
 <script>
 import { required, minLength, sameAs } from 'vuelidate/lib/validators';
-// import { mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import customValidator from '@/helper/validator';
 
 export default {
@@ -100,7 +100,7 @@ export default {
     },
   },
   methods: {
-    // TODO: 使用mapActions重命名模块调用
+    ...mapActions('user', { usrRegister: 'register' }),
     validateState(name) {
       // 这里是es6解构赋值
       const { $dirty, $error } = this.$v.user[name];
@@ -113,7 +113,7 @@ export default {
       if (this.$v.user.$anyError) {
         return;
       }
-      this.$store.dispatch('user/register', this.user).then(() => {
+      this.usrRegister(this.user).then(() => {
         // jump to home page
         this.$router.replace({ name: 'Home' });
       }).catch((err) => {

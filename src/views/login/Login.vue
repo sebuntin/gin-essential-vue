@@ -47,6 +47,7 @@
 
 <script>
 import { required, minLength } from 'vuelidate/lib/validators';
+import { mapActions } from 'vuex';
 import customValidator from '@/helper/validator';
 
 export default {
@@ -73,6 +74,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('user', { usrLogin: 'login' }),
     validateState(name) {
       // 这里是es6解构赋值
       const { $dirty, $error } = this.$v.user[name];
@@ -86,7 +88,7 @@ export default {
         return;
       }
       // request api
-      this.$store.dispatch('user/login', {
+      this.usrLogin({
         telephone: this.user.telephone,
         password: this.user.password,
       }).then(() => {
